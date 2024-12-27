@@ -1,0 +1,23 @@
+{
+  "name": "spotify-rss-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChiefYuHan/spotify-rss-generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChiefYuHan/spotify-rss-generator/issues"
+  },
+  "homepage": "https://github.com/ChiefYuHan/spotify-rss-generator#readme",
+  "description": "",
+  "dependencies": {
+    "feed": "^4.2.2",
+    "spotify-web-api-node": "^5.0.2"
+  }
+}
