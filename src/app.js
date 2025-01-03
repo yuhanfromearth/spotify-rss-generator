@@ -7,7 +7,7 @@ import dbService from "./services/database.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
@@ -22,10 +22,12 @@ app.use("/", feedRoutes);
 
 try {
   await dbService.connect();
-  app.listen(3000, () => {
-    console.log(`Spotify RSS Feed Generator listening on port ${3000}`);
+  app.listen(PORT, () => {
+    console.log(`Spotify RSS Feed Generator listening on port ${PORT}`);
   });
 } catch (error) {
   console.error("Failed to initialize app:", error);
   process.exit(1);
 }
+
+export default app;
