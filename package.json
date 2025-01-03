@@ -1,10 +1,12 @@
 {
   "name": "spotify-rss-generator",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/app.js"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ChiefYuHan/spotify-rss-generator.git"
@@ -17,7 +19,16 @@
   "homepage": "https://github.com/ChiefYuHan/spotify-rss-generator#readme",
   "description": "",
   "dependencies": {
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
     "feed": "^4.2.2",
+    "mongoose": "^8.9.2",
     "spotify-web-api-node": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/spotify-web-api-node": "^5.0.11",
+    "nodemon": "^3.1.9"
   }
 }

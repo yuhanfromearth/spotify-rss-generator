@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+    <head>
+        <title><%= show_name %> - RSS Feed</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="icon" href="/icon.png" />
+    </head>
+    <body class="bg-gray-100">
+        <div class="container mx-auto px-4 py-8 max-w-4xl">
+            <!-- Header Section -->
+            <header class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">
+                    <%= show_name %>
+                </h1>
+                <img
+                    src="<%= cover_image %>"
+                    alt="Show Cover"
+                    class="w-64 h-64 mx-auto rounded-lg shadow-lg mb-4"
+                />
+                <p class="text-gray-600 mb-6"><%- show_description %></p>
+                <div class="flex justify-center space-x-4">
+                    <a
+                        href="/feed/<%= showId %>/rss"
+                        class="inline-flex items-center px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg shadow hover:bg-orange-600 transition duration-200"
+                    >
+                        <svg
+                            class="w-5 h-5 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 110-2 1 1 0 010 2z"
+                            ></path>
+                        </svg>
+                        Subscribe to RSS Feed
+                    </a>
+                    <a
+                        href="<%= spotify_url %>"
+                        target="_blank"
+                        class="inline-flex items-center px-6 py-3 bg-green-500 text-white font-semibold rounded-lg shadow hover:bg-green-600 transition duration-200"
+                    >
+                        <svg
+                            class="w-5 h-5 mr-2"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"
+                            />
+                        </svg>
+                        Open in Spotify
+                    </a>
+                </div>
+            </header>
+
+            <!-- Episodes Section -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Episodes</h2>
+                <div class="space-y-6">
+                    <% episodes.forEach(function(episode) { %>
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h3 class="text-xl font-semibold mb-2"><%= episode.name %></h3>
+                            <p class="text-gray-600"><%- episode.description %></p>
+                            <div class="mt-4">
+                                <span class="text-sm text-gray-500">
+                                    Released: <%= new Date(episode.release_date).toLocaleDateString() %>
+                                </span>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
