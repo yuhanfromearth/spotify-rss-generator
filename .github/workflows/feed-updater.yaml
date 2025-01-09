@@ -1,0 +1,30 @@
+name: Feed Updater
+
+# Runs every 2 hours
+on:
+  schedule:
+    - cron: "0 */2 * * *" # Every 2 hours
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  update-feeds:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 23.5.0
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run feed updater
+        env:
+          MONGODB_CLUSTER_PASSWORD: ${{ secrets.MONGODB_CLUSTER_PASSWORD }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+        run: node src/services/runFeedUpdates.js

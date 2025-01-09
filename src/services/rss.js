@@ -10,6 +10,9 @@ export class RSSGenerator {
 
   async generateFeed(showId) {
     const spotify_show = await this.spotifyService.getShow(showId);
+    if (!spotify_show) {
+      throw new Error(`Failed to fetch show data for ID: ${showId}`);
+    }
     const title = spotify_show.name;
     const description = spotify_show.description;
     const link = spotify_show.href;
@@ -29,9 +32,34 @@ export class RSSGenerator {
     });
 
     const episodes_response = await this.spotifyService.getEpisodes(showId);
+    if (!episodes_response || !episodes_response.items) {
+      throw new Error(`Failed to fetch episodes for show ID: ${showId}`);
+    }
+    console.log(
+      `Number of episodes found for show ${showId}: ${episodes_response.total}`,
+    );
     const episodes = episodes_response.items;
 
     for (const episode of episodes) {
+      if (!episode) {
+        console.warn(`Skipping null episode in show ${showId}`);
+        continue;
+      }
+      // Verify all required properties exist
+      if (
+        !episode.name ||
+        !episode.description ||
+        !episode.uri ||
+        !episode.release_date
+      ) {
+        console.warn(`Skipping invalid episode in show ${showId}:`, {
+          hasName: !!episode.name,
+          hasDescription: !!episode.description,
+          hasUri: !!episode.uri,
+          hasReleaseDate: !!episode.release_date,
+        });
+        continue;
+      }
       const newItem = {
         title: episode.name,
         description: episode.description,
