@@ -27,4 +27,4 @@ jobs:
           MONGODB_CLUSTER_PASSWORD: ${{ secrets.MONGODB_CLUSTER_PASSWORD }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-        run: node src/services/runFeedUpdates.js
+        run: node --trace-warnings src/services/runFeedUpdates.js
