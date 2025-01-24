@@ -27,4 +27,10 @@ jobs:
           MONGODB_CLUSTER_PASSWORD: ${{ secrets.MONGODB_CLUSTER_PASSWORD }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-        run: node --trace-warnings src/services/runFeedUpdates.js
+        run: |
+          node --trace-warnings src/services/runFeedUpdates.js || {
+            echo "Feed updater failed with exit code $?"
+            echo "Last 100 lines of log:"
+            tail -n 100 feed-updater.log
+            exit 1
+          }

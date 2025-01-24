@@ -35,7 +35,6 @@ class FeedUpdaterService {
       feed.lastUpdated = new Date();
       feed.episodes = show.episodes.items;
 
-      // Save updated feed
       await feed.save();
 
       console.log(`Updated feed for show: ${feed.showId}`);
@@ -51,7 +50,6 @@ class FeedUpdaterService {
       console.log("Update job is already running");
       return { success: false, message: "Update job is already running" };
     }
-
     this.isRunning = true;
     console.log("Starting feed update job");
 
@@ -73,18 +71,47 @@ class FeedUpdaterService {
         errors: [],
       };
 
-      // Update feeds with a small delay between each to avoid rate limiting
-      for (const feed of feeds) {
-        try {
-          await this.updateFeed(feed);
-          results.updated++;
-          await setTimeout(1000); // 1 second delay between updates
-        } catch (error) {
-          results.failed++;
-          results.errors.push({
-            showId: feed.showId,
-            error: error.message,
-          });
+      // Process in batches of 10 feeds
+      const BATCH_SIZE = 10;
+      for (let i = 0; i < feeds.length; i += BATCH_SIZE) {
+        const batch = feeds.slice(i, i + BATCH_SIZE);
+
+        // Process each batch in parallel
+        const batchPromises = batch.map(async (feed) => {
+          try {
+            await this.updateFeed(feed);
+            results.updated++;
+          } catch (error) {
+            results.failed++;
+            results.errors.push({
+              showId: feed.showId,
+              error: error.message,
+            });
+          }
+        });
+
+        // Wait for batch to complete
+        await Promise.all(batchPromises);
+
+        // Add delay between batches to avoid rate limiting
+        if (i + BATCH_SIZE < feeds.length) {
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+        }
+
+        // Log progress
+        console.log(
+          `Processed ${Math.min(i + BATCH_SIZE, feeds.length)}/${feeds.length} feeds`,
+        );
+
+        // Check if we're approaching the GitHub Actions timeout
+        if (
+          Date.now() - process.env.GITHUB_JOB_START_TIME >
+          5.5 * 60 * 60 * 1000
+        ) {
+          console.log(
+            "Approaching GitHub Actions timeout, saving progress and exiting...",
+          );
+          break;
         }
       }
 
@@ -97,7 +124,6 @@ class FeedUpdaterService {
       this.isRunning = false;
     }
   }
-
   async updateSingleShow(showId) {
     try {
       // Find the specific feed
