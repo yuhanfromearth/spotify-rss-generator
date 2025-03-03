@@ -60,14 +60,19 @@ export class RSSGenerator {
         });
         continue;
       }
+      // Convert spotify:episode:xyz URI to proper web URL
+      const episodeId = episode.uri.split(':').pop();
+      const episodeUrl = `https://open.spotify.com/episode/${episodeId}`;
+      
       const newItem = {
         title: episode.name,
         description: episode.description,
-        link: episode.uri,
+        link: episodeUrl,
         date: this.spotifyDateToJsDate(
           episode.release_date,
           episode.release_date_precision,
         ),
+        image: episode.images && episode.images.length > 0 ? episode.images[0].url : undefined
       };
       feed.addItem(newItem);
     }
