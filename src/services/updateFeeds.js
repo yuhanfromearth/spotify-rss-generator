@@ -95,7 +95,7 @@ class FeedUpdaterService {
 
         // Add delay between batches to avoid rate limiting
         if (i + BATCH_SIZE < feeds.length) {
-          await new Promise((resolve) => setTimeout(resolve, 2000));
+          await setTimeout(2000); // Using the imported setTimeout from timers/promises
         }
 
         // Log progress
@@ -104,9 +104,10 @@ class FeedUpdaterService {
         );
 
         // Check if we're approaching the GitHub Actions timeout
+        const startTime = process.env.GITHUB_JOB_START_TIME ? parseInt(process.env.GITHUB_JOB_START_TIME, 10) : null;
         if (
-          Date.now() - process.env.GITHUB_JOB_START_TIME >
-          5.5 * 60 * 60 * 1000
+          startTime && 
+          Date.now() - startTime > 25 * 60 * 1000 // 25 minutes (5 min safety margin from the 30 min timeout)
         ) {
           console.log(
             "Approaching GitHub Actions timeout, saving progress and exiting...",
