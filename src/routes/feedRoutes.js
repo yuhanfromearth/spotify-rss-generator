@@ -15,6 +15,30 @@ await spotifyService.initialize();
 
 const rssGenerator = new RSSGenerator(spotifyService);
 
+router.get("/api/search", async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query || query.trim() === "") {
+      return res.status(400).json({ success: false, message: "Search query is required" });
+    }
+    
+    const shows = await spotifyService.searchShows(query);
+    res.json({
+      success: true,
+      shows: shows.map(show => ({
+        id: show.id,
+        name: show.name,
+        description: show.description?.substring(0, 100) + (show.description?.length > 100 ? "..." : ""),
+        image: show.images?.[0]?.url,
+        publisher: show.publisher
+      }))
+    });
+  } catch (error) {
+    console.error("Error searching shows:", error);
+    res.status(500).json({ success: false, message: "Error searching for podcasts" });
+  }
+});
+
 router.post("/api/feeds", async (req, res) => {
   try {
     const { showId } = req.body;

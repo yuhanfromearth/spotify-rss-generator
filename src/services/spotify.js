@@ -24,4 +24,9 @@ export class SpotifyService {
     const data = await this.spotify.getShowEpisodes(showId);
     return data.body;
   }
+  
+  async searchShows(query, limit = 5) {
+    const data = await this.spotify.searchShows(query, { limit });
+    return data.body.shows.items;
+  }
 }

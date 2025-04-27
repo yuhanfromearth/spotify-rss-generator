@@ -20,23 +20,49 @@
                     Generate a RSS Feed you can subscribe to for your facourite
                     Podcast.
                 </p>
-                <form id="rssForm">
-                    <label for="spotify_url">Enter Spotify Show URL:</label>
-                    <input
-                        type="url"
-                        class="w-full px-4 py-3 mt-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline"
-                        id="spotify_url"
-                        name="spotify_url"
-                        placeholder="https://open.spotify.com/show/..."
-                        required
-                    />
-                    <button
-                        type="submit"
-                        class="px-4 py-2 mt-8 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-                    >
-                        Generate RSS Feed
-                    </button>
-                </form>
+                <div class="mb-8 text-center">
+                    <div class="flex items-center justify-center mb-2">
+                        <div class="flex space-x-2 mb-2">
+                            <button id="urlModeBtn" class="px-3 py-1 text-sm bg-green-600 text-white rounded-md">URL Mode</button>
+                            <button id="searchModeBtn" class="px-3 py-1 text-sm bg-gray-300 text-gray-700 rounded-md">Search Mode</button>
+                        </div>
+                    </div>
+                    <div id="urlInputMode">
+                        <form id="rssForm">
+                            <label for="spotify_url">Enter Spotify Show URL:</label>
+                            <input
+                                type="url"
+                                class="w-full px-4 py-3 mt-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline"
+                                id="spotify_url"
+                                name="spotify_url"
+                                placeholder="https://open.spotify.com/show/..."
+                                required
+                            />
+                            <button
+                                type="submit"
+                                class="px-4 py-2 mt-8 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                            >
+                                Generate RSS Feed
+                            </button>
+                        </form>
+                    </div>
+                    <div id="searchInputMode" class="hidden">
+                        <div class="relative">
+                            <label for="search_query">Search for Podcast:</label>
+                            <input
+                                type="text"
+                                class="w-full px-4 py-3 mt-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline"
+                                id="search_query"
+                                name="search_query"
+                                placeholder="Search for podcasts..."
+                                autocomplete="off"
+                            />
+                            <div id="search_results" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg hidden max-h-96 overflow-y-auto">
+                                <!-- Search results will appear here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="result" class="mt-8"></div>
             </div>
         </div>
